@@ -3,102 +3,102 @@ package com.javarush.projectquest.quests;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class TreasureHuntQuest implements Quest {
 
     private static final long serialVersionUID = 1L;
-
-    private Map<Integer, Question> questions;
+    private Map<Integer, Question> questions = new HashMap<>();
+    private final ResourceBundle bundle = ResourceBundle.getBundle("treasure_messages");
 
     public TreasureHuntQuest() {
         initializeQuestions();
     }
 
     private void initializeQuestions() {
-        questions = new HashMap<>();
 
         questions.put(1, new Question(1,
-                "Вы стоите перед входом в заброшенный замок. Ночь, луна освещает древние стены. Что вы сделаете?",
-                "Войти через главный вход",
-                "Найти тайный вход",
+                bundle.getString("q1.text"),
+                bundle.getString("q1.answer1"),
+                bundle.getString("q1.answer2"),
                 2, 3));
 
         questions.put(2, new Question(2,
-                "Вы входите в главный зал. Слышен странный шорох. На стене висит старый меч.",
-                "Взять меч и исследовать звук",
-                "Игнорировать меч и пойти дальше",
+                bundle.getString("q2.text"),
+                bundle.getString("q2.answer1"),
+                bundle.getString("q2.answer2"),
                 4, 5));
 
         questions.put(3, new Question(3,
-                "Вы нашли потайную дверь за кустами. Она ведет в подвал замка.",
-                "Спуститься в подвал",
-                "Вернуться к главному входу",
+                bundle.getString("q3.text"),
+                bundle.getString("q3.answer1"),
+                bundle.getString("q3.answer2"),
                 6, 2));
 
         questions.put(4, new Question(4,
-                "Вы взяли меч и пошли на звук. Это оказался призрак старого рыцаря!",
-                "Сразиться с призраком",
-                "Попытаться поговорить",
+                bundle.getString("q4.text"),
+                bundle.getString("q4.answer1"),
+                bundle.getString("q4.answer2"),
                 7, 8));
 
         questions.put(5, new Question(5,
-                "Вы пошли дальше без оружия. В темноте вы слышите шаги...",
-                "Спрятаться",
-                "Бежать",
+                bundle.getString("q5.text"),
+                bundle.getString("q5.answer1"),
+                bundle.getString("q5.answer2"),
                 9, 10));
 
         questions.put(6, new Question(6,
-                "В подвале вы нашли сундук с сокровищами! Но вход завалило камнями.",
-                "Попытаться разобрать завал",
-                "Искать другой выход",
+                bundle.getString("q6.text"),
+                bundle.getString("q6.answer1"),
+                bundle.getString("q6.answer2"),
                 11, 12));
 
         questions.put(7, new Question(7,
-                "Вы победили призрака! Он рассыпался в прах, оставив после себя древний амулет.",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q7.text"),
+                bundle.getString("q7.answer1"),
+                bundle.getString("q7.answer2"),
                 1, 1, true,
-                "Вы нашли древний амулет и выбрались из замка! Сокровища ваши!",
+                bundle.getString("q7.victory"),
                 null));
 
         questions.put(8, new Question(8,
-                "Призрак оказался дружелюбным! Он показал вам тайный ход к сокровищам.",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q8.text"),
+                bundle.getString("q8.answer1"),
+                bundle.getString("q8.answer2"),
                 1, 1, true,
-                "Вы нашли золото и подружились с призраком! Победа!",
+                bundle.getString("q8.victory"),
                 null));
 
         questions.put(9, new Question(9,
-                "Вы спрятались, но это был всего лишь кот. Вы нашли выход с мешком монет!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q9.text"),
+                bundle.getString("q9.answer1"),
+                bundle.getString("q9.answer2"),
                 1, 1, true,
-                "Вы нашли сокровища и благополучно выбрались!",
+                bundle.getString("q9.victory"),
                 null));
 
         questions.put(10, new Question(10,
-                "Вы побежали и упали в яму с водой. Выбраться не удалось...",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q10.text"),
+                bundle.getString("q10.answer1"),
+                bundle.getString("q10.answer2"),
                 1, 1, true,
                 null,
-                "Вы утонули в подземной реке. Игра окончена."));
+                bundle.getString("q10.defeat")));
 
         questions.put(11, new Question(11,
-                "Вы разобрали завал, но камни упали и придавили вас...",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q11.text"),
+                bundle.getString("q11.answer1"),
+                bundle.getString("q11.answer2"),
                 1, 1, true,
                 null,
-                "Вы погибли под завалом. Игра окончена."));
+                bundle.getString("q11.defeat")));
 
         questions.put(12, new Question(12,
-                "Вы нашли старый туннель, ведущий прямо к выходу! Сокровища ваши!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q12.text"),
+                bundle.getString("q12.answer1"),
+                bundle.getString("q12.answer2"),
                 1, 1, true,
-                "Вы нашли выход с сокровищами! Поздравляем!",
+                bundle.getString("q12.victory"),
                 null));
     }
 
@@ -109,13 +109,12 @@ public class TreasureHuntQuest implements Quest {
 
     @Override
     public String getTitle() {
-        return "Поиск сокровищ в замке";
+        return bundle.getString("quest.title");
     }
 
     @Override
     public String getDescription() {
-        return "Отправляйтесь в заброшенный замок на поиски легендарных сокровищ. " +
-                "Вас ждут встречи с призраками, ловушки и загадочные подземелья.";
+        return bundle.getString("quest.description");
     }
 
     @Override

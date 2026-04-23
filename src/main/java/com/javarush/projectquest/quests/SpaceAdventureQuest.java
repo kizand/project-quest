@@ -1,90 +1,88 @@
 package com.javarush.projectquest.quests;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SpaceAdventureQuest implements Quest {
 
     private static final long serialVersionUID = 1L;
-    private Map<Integer, Question> questions;
+    private Map<Integer, Question> questions = new HashMap<>();
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("space_messages");
 
     public SpaceAdventureQuest() {
         initializeQuestions();
     }
 
     private void initializeQuestions() {
-        questions = new HashMap<>();
 
         questions.put(1, new Question(1,
-                "Ваш космический корабль терпит крушение на неизвестной планете. Что делать?",
-                "Исследовать поверхность",
-                "Попытаться починить корабль",
+                bundle.getString("q1.text"),
+                bundle.getString("q1.answer1"),
+                bundle.getString("q1.answer2"),
                 2, 3));
 
         questions.put(2, new Question(2,
-                "Вы выходите на поверхность. Видите странные сооружения вдалеке.",
-                "Направиться к сооружениям",
-                "Вернуться к кораблю",
+                bundle.getString("q2.text"),
+                bundle.getString("q2.answer1"),
+                bundle.getString("q2.answer2"),
                 4, 3));
 
         questions.put(3, new Question(3,
-                "Ремонт корабля требует редких кристаллов. Они есть в пещере неподалеку.",
-                "Идти в пещеру",
-                "Продолжить ремонт без кристаллов",
+                bundle.getString("q3.text"),
+                bundle.getString("q3.answer1"),
+                bundle.getString("q3.answer2"),
                 5, 6));
 
         questions.put(4, new Question(4,
-                "Вы находите заброшенную базу пришельцев. Там есть топливо!",
-                "Взять топливо",
-                "Поискать что-то еще",
+                bundle.getString("q4.text"),
+                bundle.getString("q4.answer1"),
+                bundle.getString("q4.answer2"),
                 7, 8));
 
         questions.put(5, new Question(5,
-                "В пещере вы находите кристаллы, но просыпается огромный паук!",
-                "Сражаться с пауком",
-                "Убегать",
+                bundle.getString("q5.text"),
+                bundle.getString("q5.answer1"),
+                bundle.getString("q5.answer2"),
                 9, 10));
 
         questions.put(6, new Question(6,
-                "Без кристаллов двигатель взрывается...",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q6.text"),
+                bundle.getString("q6.answer1"),
+                bundle.getString("q6.answer2"),
                 1, 1, true,
-                null, "Корабль уничтожен. Вы погибли."));
+                null, bundle.getString("q6.defeat")));
 
         questions.put(7, new Question(7,
-                "С топливом вы взлетаете и возвращаетесь на Землю!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q7.text"),
+                bundle.getString("q7.answer1"),
+                bundle.getString("q7.answer2"),
                 1, 1, true,
-                "Вы успешно вернулись на Землю и стали героем!",
+                bundle.getString("q7.victory"),
                 null));
 
         questions.put(8, new Question(8,
-                "Вы натыкаетесь на ловушку и попадаете в плен к пришельцам.",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q8.text"),
+                bundle.getString("q8.answer1"),
+                bundle.getString("q8.answer2"),
                 1, 1, true,
                 null,
-                "Вас взяли в плен. Игра окончена."));
+                bundle.getString("q8.defeat")));
 
         questions.put(9, new Question(9,
-                "Вы победили паука и взяли кристаллы. Корабль починен!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q9.text"),
+                bundle.getString("q9.answer1"),
+                bundle.getString("q9.answer2"),
                 1, 1, true,
-                "Вы починили корабль и улетели домой! Победа!",
+                bundle.getString("q9.victory"),
                 null));
 
         questions.put(10, new Question(10,
-                "Паук догоняет вас и...",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q10.text"),
+                bundle.getString("q10.answer1"),
+                bundle.getString("q10.answer2"),
                 1, 1, true,
                 null,
-                "Паук оказался быстрее. Вы погибли."));
+                bundle.getString("q10.defeat")));
     }
 
     @Override
@@ -94,13 +92,12 @@ public class SpaceAdventureQuest implements Quest {
 
     @Override
     public String getTitle() {
-        return "Космическое приключение";
+        return bundle.getString("quest.title");
     }
 
     @Override
     public String getDescription() {
-        return "Вы - капитан космического корабля, потерпевшего крушение на неизвестной планете. " +
-                "Сможете ли вы выжить и вернуться домой?";
+        return bundle.getString("quest.description");
     }
 
     @Override

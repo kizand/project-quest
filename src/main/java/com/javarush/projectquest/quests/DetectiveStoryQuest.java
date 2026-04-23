@@ -3,102 +3,103 @@ package com.javarush.projectquest.quests;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class DetectiveStoryQuest implements Quest {
 
     private static final long serialVersionUID = 1L;
+    private Map<Integer, Question> questions = new HashMap<>();
 
-    private Map<Integer, Question> questions;
+    private final ResourceBundle bundle = ResourceBundle.getBundle("detective_messages");
 
     public DetectiveStoryQuest() {
         initializeQuestions();
     }
 
     private void initializeQuestions() {
-        questions = new HashMap<>();
 
         questions.put(1, new Question(1,
-                "Вы - известный детектив. Вас вызывают на место убийства миллионера. С чего начнете?",
-                "Осмотреть тело",
-                "Поговорить с прислугой",
+                bundle.getString("q1.text"),
+                bundle.getString("q1.answer1"),
+                bundle.getString("q1.answer2"),
                 2, 3));
 
         questions.put(2, new Question(2,
-                "На теле найдены странные следы укуса. Похоже на вампира!",
-                "Искать вампира",
-                "Искать другие улики",
+                bundle.getString("q2.text"),
+                bundle.getString("q2.answer1"),
+                bundle.getString("q2.answer2"),
                 4, 5));
 
         questions.put(3, new Question(3,
-                "Прислуга говорит, что видели таинственного незнакомца в плаще.",
-                "Искать незнакомца",
-                "Проверить комнату убитого",
+                bundle.getString("q3.text"),
+                bundle.getString("q3.answer1"),
+                bundle.getString("q3.answer2"),
                 6, 5));
 
         questions.put(4, new Question(4,
-                "Вы находите логово вампира в подвале!",
-                "Войти с распятием",
-                "Войти с колом",
+                bundle.getString("q4.text"),
+                bundle.getString("q4.answer1"),
+                bundle.getString("q4.answer2"),
                 7, 8));
 
         questions.put(5, new Question(5,
-                "В комнате убитого найден дневник с зашифрованными записями.",
-                "Расшифровать записи",
-                "Показать эксперту",
+                bundle.getString("q5.text"),
+                bundle.getString("q5.answer1"),
+                bundle.getString("q5.answer2"),
                 9, 10));
 
         questions.put(6, new Question(6,
-                "Незнакомец оказывается братом убитого. Он предлагает взятку, чтобы вы закрыли дело.",
-                "Взять взятку",
-                "Арестовать его",
+                bundle.getString("q6.text"),
+                bundle.getString("q6.answer1"),
+                bundle.getString("q6.answer2"),
                 11, 12));
 
         questions.put(7, new Question(7,
-                "Вампир боится распятия. Вы заставляете его признаться в убийстве!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q7.text"),
+                bundle.getString("q7.answer1"),
+                bundle.getString("q7.answer2"),
                 1, 1, true,
-                "Дело раскрыто! Убийца - вампир, и он обезврежен!",
+                bundle.getString("q7.victory"),
                 null));
 
         questions.put(8, new Question(8,
-                "Кол оказался недостаточно острым. Вампир атакует...",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q8.text"),
+                bundle.getString("q8.answer1"),
+                bundle.getString("q8.answer2"),
                 1, 1, true,
                 null,
-                "Вампир убивает вас. Дело остается нераскрытым."));
+                bundle.getString("q8.defeat")));
 
         questions.put(9, new Question(9,
-                "В дневнике зашифровано имя убийцы - это дворецкий!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q9.text"),
+                bundle.getString("q9.answer1"),
+                bundle.getString("q9.answer2"),
                 1, 1, true,
-                "Дворецкий арестован! Дело раскрыто!",
+                bundle.getString("q9.victory"),
                 null));
 
         questions.put(10, new Question(10,
-                "Эксперт теряет улики. Дело закрыто из-за отсутствия доказательств.",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q10.text"),
+                bundle.getString("q10.answer1"),
+                bundle.getString("q10.answer2"),
                 1, 1, true,
                 null,
-                "Убийца остается на свободе. Дело провалено."));
+                bundle.getString("q10.defeat")));
 
         questions.put(11, new Question(11,
-                "Взятка оказывается фальшивой, и вас арестовывают за коррупцию.",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q11.text"),
+                bundle.getString("q11.answer1"),
+                bundle.getString("q11.answer2"),
                 1, 1, true,
                 null,
-                "Вы в тюрьме, а убийца на свободе."));
+                bundle.getString("q11.defeat")));
 
         questions.put(12, new Question(12,
-                "Брат убийцы сознается в преступлении из ревности!",
-                "Начать заново",
-                "Выбрать другой квест",
+                bundle.getString("q12.text"),
+                bundle.getString("q12.answer1"),
+                bundle.getString("q12.answer2"),
                 1, 1, true,
-                "Преступник сознался! Дело раскрыто!",
+                bundle.getString("q12.victory"),
                 null));
     }
 
@@ -109,13 +110,12 @@ public class DetectiveStoryQuest implements Quest {
 
     @Override
     public String getTitle() {
-        return "Детективная история";
+        return bundle.getString("quest.title");
     }
 
     @Override
     public String getDescription() {
-        return "Раскройте убийство миллионера в старом особняке. Под подозрением все: " +
-                "от прислуги до таинственного вампира!";
+        return bundle.getString("quest.description");
     }
 
     @Override
