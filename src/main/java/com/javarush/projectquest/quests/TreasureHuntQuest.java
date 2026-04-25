@@ -1,14 +1,11 @@
 package com.javarush.projectquest.quests;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
-public class TreasureHuntQuest implements Quest {
+public class TreasureHuntQuest extends BaseLevel implements Quest {
 
     private static final long serialVersionUID = 1L;
-    private Map<Integer, Question> questions = new HashMap<>();
+    private final Map<Integer, Question> questions = new HashMap<>();
     private final ResourceBundle bundle = ResourceBundle.getBundle("treasure_messages");
 
     public TreasureHuntQuest() {
@@ -59,7 +56,8 @@ public class TreasureHuntQuest implements Quest {
                 bundle.getString("q7.answer2"),
                 1, 1, true,
                 bundle.getString("q7.victory"),
-                null));
+                "",
+                Integer.parseInt(bundle.getString("q7.difficulty"))));
 
         questions.put(8, new Question(8,
                 bundle.getString("q8.text"),
@@ -67,7 +65,8 @@ public class TreasureHuntQuest implements Quest {
                 bundle.getString("q8.answer2"),
                 1, 1, true,
                 bundle.getString("q8.victory"),
-                null));
+                "",
+                Integer.parseInt(bundle.getString("q8.difficulty"))));
 
         questions.put(9, new Question(9,
                 bundle.getString("q9.text"),
@@ -75,23 +74,26 @@ public class TreasureHuntQuest implements Quest {
                 bundle.getString("q9.answer2"),
                 1, 1, true,
                 bundle.getString("q9.victory"),
-                null));
+                "",
+                Integer.parseInt(bundle.getString("q9.difficulty"))));
 
         questions.put(10, new Question(10,
                 bundle.getString("q10.text"),
                 bundle.getString("q10.answer1"),
                 bundle.getString("q10.answer2"),
                 1, 1, true,
-                null,
-                bundle.getString("q10.defeat")));
+                "",
+                bundle.getString("q10.defeat"),
+                Integer.parseInt(bundle.getString("q10.difficulty"))));
 
         questions.put(11, new Question(11,
                 bundle.getString("q11.text"),
                 bundle.getString("q11.answer1"),
                 bundle.getString("q11.answer2"),
                 1, 1, true,
-                null,
-                bundle.getString("q11.defeat")));
+                "",
+                bundle.getString("q11.defeat"),
+                Integer.parseInt(bundle.getString("q11.difficulty"))));
 
         questions.put(12, new Question(12,
                 bundle.getString("q12.text"),
@@ -99,12 +101,13 @@ public class TreasureHuntQuest implements Quest {
                 bundle.getString("q12.answer2"),
                 1, 1, true,
                 bundle.getString("q12.victory"),
-                null));
+                "",
+                Integer.parseInt(bundle.getString("q12.difficulty"))));
     }
 
     @Override
     public String getId() {
-        return "treasure-hunt";
+        return config.getProperty("treasure.id");
     }
 
     @Override
@@ -119,22 +122,22 @@ public class TreasureHuntQuest implements Quest {
 
     @Override
     public String getGenre() {
-        return "Хоррор/Приключения";
+        return config.getProperty("treasure.genre");
     }
 
     @Override
     public int getDifficultyLevel() {
-        return 3;
+        return getDifficultyFromProps("treasure.difficulty");
     }
 
     @Override
     public String getBackgroundImage() {
-        return "/images/castle.jpg";
+        return config.getProperty("treasure.image");
     }
 
     @Override
     public Map<Integer, Question> getQuestions() {
-        return questions;
+        return Collections.unmodifiableMap(questions);
     }
 
     @Override
@@ -144,7 +147,7 @@ public class TreasureHuntQuest implements Quest {
 
     @Override
     public boolean isVictory(int questionId) {
-        return questionId == 7 || questionId == 8 || questionId == 9 || questionId == 12;
+        return super.isVictory(questionId, "treasure.victoryIds");
     }
 
     @Override

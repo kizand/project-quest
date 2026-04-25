@@ -2,10 +2,10 @@ package com.javarush.projectquest.quests;
 
 import java.util.*;
 
-public class SpaceAdventureQuest implements Quest {
+public class SpaceAdventureQuest extends BaseLevel implements Quest {
 
     private static final long serialVersionUID = 1L;
-    private Map<Integer, Question> questions = new HashMap<>();
+    private final Map<Integer, Question> questions = new HashMap<>();
 
     private final ResourceBundle bundle = ResourceBundle.getBundle("space_messages");
 
@@ -50,44 +50,46 @@ public class SpaceAdventureQuest implements Quest {
                 bundle.getString("q6.answer1"),
                 bundle.getString("q6.answer2"),
                 1, 1, true,
-                null, bundle.getString("q6.defeat")));
+                "", bundle.getString("q6.defeat"),
+                Integer.parseInt(bundle.getString("q6.difficulty"))));
 
         questions.put(7, new Question(7,
                 bundle.getString("q7.text"),
                 bundle.getString("q7.answer1"),
                 bundle.getString("q7.answer2"),
                 1, 1, true,
-                bundle.getString("q7.victory"),
-                null));
+                bundle.getString("q7.victory"), "",
+                Integer.parseInt(bundle.getString("q7.difficulty"))));
 
         questions.put(8, new Question(8,
                 bundle.getString("q8.text"),
                 bundle.getString("q8.answer1"),
                 bundle.getString("q8.answer2"),
                 1, 1, true,
-                null,
-                bundle.getString("q8.defeat")));
+                "",
+                bundle.getString("q8.defeat"),
+                Integer.parseInt(bundle.getString("q8.difficulty"))));
 
         questions.put(9, new Question(9,
                 bundle.getString("q9.text"),
                 bundle.getString("q9.answer1"),
                 bundle.getString("q9.answer2"),
-                1, 1, true,
-                bundle.getString("q9.victory"),
-                null));
+                1, 1, true, "",
+                bundle.getString("q10.defeat"),
+                Integer.parseInt(bundle.getString("q10.difficulty"))));
 
         questions.put(10, new Question(10,
                 bundle.getString("q10.text"),
                 bundle.getString("q10.answer1"),
                 bundle.getString("q10.answer2"),
-                1, 1, true,
-                null,
-                bundle.getString("q10.defeat")));
+                1, 1, true, "",
+                bundle.getString("q10.defeat"),
+                Integer.parseInt(bundle.getString("q10.difficulty"))));
     }
 
     @Override
     public String getId() {
-        return "space-adventure";
+        return config.getProperty("space.id");
     }
 
     @Override
@@ -102,17 +104,17 @@ public class SpaceAdventureQuest implements Quest {
 
     @Override
     public String getGenre() {
-        return "Sci-Fi/Выживание";
+        return config.getProperty("space.genre");
     }
 
     @Override
     public int getDifficultyLevel() {
-        return 4;
+        return getDifficultyFromProps("space.difficulty");
     }
 
     @Override
     public String getBackgroundImage() {
-        return "/images/space.jpg";
+        return config.getProperty("space.image");
     }
 
     @Override
@@ -127,7 +129,7 @@ public class SpaceAdventureQuest implements Quest {
 
     @Override
     public boolean isVictory(int questionId) {
-        return questionId == 7 || questionId == 9;
+        return super.isVictory(questionId, "space.victoryIds");
     }
 
     @Override

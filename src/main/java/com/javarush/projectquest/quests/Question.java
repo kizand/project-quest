@@ -1,6 +1,7 @@
 package com.javarush.projectquest.quests;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class Question implements Serializable {
 
@@ -15,15 +16,16 @@ public class Question implements Serializable {
     private boolean isFinal;
     private String victoryMessage;
     private String defeatMessage;
+    private final int difficulty;
 
     public Question(int id, String text, String option1, String option2,
                     int nextIdOption1, int nextIdOption2) {
-        this(id, text, option1, option2, nextIdOption1, nextIdOption2, false, null, null);
+        this(id, text, option1, option2, nextIdOption1, nextIdOption2, false, null, null, 1);
     }
 
     public Question(int id, String text, String option1, String option2,
                     int nextIdOption1, int nextIdOption2, boolean isFinal,
-                    String victoryMessage, String defeatMessage) {
+                    String victoryMessage, String defeatMessage, int difficulty) {
         this.id = id;
         this.text = text;
         this.option1 = option1;
@@ -33,6 +35,7 @@ public class Question implements Serializable {
         this.isFinal = isFinal;
         this.victoryMessage = victoryMessage;
         this.defeatMessage = defeatMessage;
+        this.difficulty = difficulty;
     }
 
     public int getId() { return id; }
@@ -42,6 +45,14 @@ public class Question implements Serializable {
     public int getNextIdOption1() { return nextIdOption1; }
     public int getNextIdOption2() { return nextIdOption2; }
     public boolean isFinal() { return isFinal; }
-    public String getVictoryMessage() { return victoryMessage; }
-    public String getDefeatMessage() { return defeatMessage; }
+    public String getVictoryMessage() {
+        return Optional.ofNullable(victoryMessage).orElse("");
+    }
+    public String getDefeatMessage() {
+        return Optional.ofNullable(defeatMessage).orElse("");
+    }
+
+    public int getDifficultyLevel() {
+        return this.difficulty;
+    }
 }

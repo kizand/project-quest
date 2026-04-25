@@ -38,6 +38,12 @@ public class FrontControllerServlet extends HttpServlet {
         String path = getCommandPath(request);
         Command command = commandFactory.getCommand(path);
 
+        String uri = request.getRequestURI();
+        if (uri.contains("/images/")) {
+            request.getServletContext().getNamedDispatcher("default").forward(request, response);
+            return;
+        }
+
         try {
             String view = command.execute(request, response);
 
