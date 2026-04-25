@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8494FF 100%);
             margin: 0;
             padding: 20px;
             min-height: 100vh;
@@ -72,7 +72,7 @@
             font-size: 0.9em;
         }
         .quest-genre {
-            background: #764ba2;
+            background: #2845D6;
             color: white;
             padding: 3px 10px;
             border-radius: 15px;
@@ -100,7 +100,7 @@
             padding-top: 15px;
         }
         .play-button {
-            background: #764ba2;
+            background: #2845D6;
             color: white;
             border: none;
             padding: 8px 20px;
@@ -110,7 +110,7 @@
             transition: background 0.3s;
         }
         .play-button:hover {
-            background: #5a3d7c;
+            background: #2845D6;
         }
         .player-info {
             background: rgba(255,255,255,0.1);
