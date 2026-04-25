@@ -8,16 +8,24 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 @WebServlet("/")
 public class FrontControllerServlet extends HttpServlet {
 
+    private static final Logger logger = LoggerFactory.getLogger(FrontControllerServlet.class);
+
     private CommandFactory commandFactory;
 
     @Override
     public void init() throws ServletException {
-        commandFactory = CommandFactory.getInstance();
+        this.commandFactory = (CommandFactory) getServletContext().getAttribute("commandFactory");
+        if (this.commandFactory == null) {
+            throw new ServletException("CommandFactory not found in ServletContext");
+        }
     }
 
     @Override
@@ -36,7 +44,7 @@ public class FrontControllerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String path = getCommandPath(request);
-        Command command = commandFactory.getCommand(path);
+        logger.debug("Processing request for path: {}", path);
 
         String uri = request.getRequestURI();
         if (uri.contains("/images/")) {
@@ -45,42 +53,34 @@ public class FrontControllerServlet extends HttpServlet {
         }
 
         try {
+            Command command = commandFactory.getCommand(path);
             String view = command.execute(request, response);
 
             if (view.startsWith("redirect:")) {
                 String redirectPath = view.substring("redirect:".length());
-                response.sendRedirect(request.getContextPath() + redirectPath);
+                String contextPath = request.getContextPath();
+
+                if (!redirectPath.startsWith("/")) {
+                    redirectPath = "/" + redirectPath;
+                }
+
+                String finalUrl = response.encodeRedirectURL(contextPath + redirectPath);
+                finalUrl = finalUrl.replace("//", "/");
+                response.sendRedirect(finalUrl);
             } else {
                 request.getRequestDispatcher(view).forward(request, response);
             }
         } catch (Exception e) {
+            logger.error("Error executing command for path: {}", path, e);
             throw new ServletException("Error executing command", e);
         }
     }
 
     private String getCommandPath(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        String contextPath = request.getContextPath();
-
-        String path = uri.substring(contextPath.length());
-
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-
-        if (path.isEmpty() || path.equals("favicon.ico")) {
+        String path = request.getServletPath();
+        path = path.replaceFirst("^/", "").replaceAll("\\.\\w+$", "");
+        if (path.isEmpty() || "favicon.ico".equals(path)) {
             return "start";
-        }
-
-        if (path.contains("?")) {
-            path = path.substring(0, path.indexOf("?"));
-        }
-        if (path.contains("#")) {
-            path = path.substring(0, path.indexOf("#"));
-        }
-
-        if (path.contains(".")) {
-            path = path.substring(0, path.indexOf("."));
         }
         return path;
     }

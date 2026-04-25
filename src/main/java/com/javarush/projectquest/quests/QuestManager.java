@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class QuestManager {
 
-    private static QuestManager instance;
+    private static volatile QuestManager instance;
     private Map<String, Quest> quests;
     private Map<String, Quest> questsById;
     private Map<String, Integer> questStats;
@@ -81,6 +81,12 @@ public class QuestManager {
         return result;
     }
     public void resetStats() {
-        questStats.clear();
+        for (String questId : questsById.keySet()) {
+            questStats.put(questId, 0);
+        }
+    }
+
+    public static void resetInstance() {
+        instance = null;
     }
 }

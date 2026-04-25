@@ -4,31 +4,28 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 @WebFilter("/*")
 public class StaticResourceFilter implements Filter {
+
+    private static final Pattern STATIC_RESOURCES =
+            Pattern.compile("^/(css|js|images|fonts)/.*|.*\\.(css|js|jpg|png|gif|ico|svg|woff2?)$",
+                    Pattern.CASE_INSENSITIVE);
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+        String path = httpRequest.getServletPath();
 
-        if (path.startsWith("/css/") ||
-                path.startsWith("/js/") ||
-                path.startsWith("/images/") ||
-                path.startsWith("/fonts/") ||
-                path.endsWith(".css") ||
-                path.endsWith(".js") ||
-                path.endsWith(".jpg") ||
-                path.endsWith(".png") ||
-                path.endsWith(".gif") ||
-                path.endsWith(".ico")) {
+        if (STATIC_RESOURCES.matcher(path).matches()) {
             chain.doFilter(request, response);
-            return;
+        } else {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
     }
 
     @Override

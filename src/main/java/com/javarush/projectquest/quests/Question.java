@@ -20,7 +20,8 @@ public class Question implements Serializable {
 
     public Question(int id, String text, String option1, String option2,
                     int nextIdOption1, int nextIdOption2) {
-        this(id, text, option1, option2, nextIdOption1, nextIdOption2, false, null, null, 1);
+        this(id, text, option1, option2, nextIdOption1, nextIdOption2, false,
+                null, null, 1);
     }
 
     public Question(int id, String text, String option1, String option2,
@@ -46,10 +47,10 @@ public class Question implements Serializable {
     public int getNextIdOption2() { return nextIdOption2; }
     public boolean isFinal() { return isFinal; }
     public String getVictoryMessage() {
-        return Optional.ofNullable(victoryMessage).orElse("");
+        return Optional.ofNullable(victoryMessage).orElse(null);
     }
     public String getDefeatMessage() {
-        return Optional.ofNullable(defeatMessage).orElse("");
+        return Optional.ofNullable(defeatMessage).orElse(null);
     }
 
     public int getDifficultyLevel() {

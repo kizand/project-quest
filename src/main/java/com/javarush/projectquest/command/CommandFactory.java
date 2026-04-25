@@ -1,39 +1,44 @@
 package com.javarush.projectquest.command;
 
+import org.reflections.Reflections;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class CommandFactory {
 
-    private static CommandFactory instance;
-    private Map<String, Command> commands;
+    private static final CommandFactory INSTANCE = new CommandFactory();
+    private final Map<String, Command> commands = new HashMap<>();
 
     private CommandFactory() {
-        commands = new HashMap<>();
-        commands.put("start", new StartCommand());
-        commands.put("game", new GameCommand());
-        commands.put("restart", new RestartCommand());
-        commands.put("selectquest", new SelectQuestCommand());
-        commands.put("selectQuest", new SelectQuestCommand());
+        initCommands();
     }
 
     public static synchronized CommandFactory getInstance() {
-        if (instance == null) {
-            instance = new CommandFactory();
+        return INSTANCE;
+    }
+
+    private void initCommands() {
+        Reflections reflections = new Reflections("com.javarush.projectquest.command");
+        Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(WebCommand.class);
+        for (Class<?> clazz : annotatedClasses) {
+            try {
+                WebCommand annotation = clazz.getAnnotation(WebCommand.class);
+                Command command = (Command) clazz.getDeclaredConstructor().newInstance();
+                commands.put(annotation.value().toLowerCase(), command);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return instance;
     }
 
     public Command getCommand(String commandName) {
         if (commandName == null || commandName.isEmpty()) {
-            return new StartCommand();
+            return commands.get("start");
         }
 
         Command command = commands.get(commandName.toLowerCase());
-        if (command == null) {
-            command = new UnknownCommand();
-        }
-
-        return command;
+        return (command != null) ? command : new UnknownCommand();
     }
 }
