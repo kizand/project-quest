@@ -137,7 +137,7 @@
     <div class="quests-grid">
         <c:forEach var="quest" items="${quests}">
             <div class="quest-card" onclick="selectQuest('${quest.id}')">
-                <div class="quest-header" style="background-image: url('${quest.backgroundImage}')">
+                <div class="quest-header" style="background-image: url('${pageContext.request.contextPath}${quest.backgroundImage}')">
                     <!-- Background image -->
                 </div>
                 <div class="quest-content">
