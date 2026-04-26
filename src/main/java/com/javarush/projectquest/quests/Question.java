@@ -47,10 +47,14 @@ public class Question implements Serializable {
     public int getNextIdOption2() { return nextIdOption2; }
     public boolean isFinal() { return isFinal; }
     public String getVictoryMessage() {
-        return Optional.ofNullable(victoryMessage).orElse(null);
+        return Optional.ofNullable(victoryMessage)
+                .filter(s -> !s.isBlank())
+                .orElse(null);
     }
     public String getDefeatMessage() {
-        return Optional.ofNullable(defeatMessage).orElse(null);
+        return Optional.ofNullable(defeatMessage)
+                .filter(s -> !s.isBlank())
+                .orElse(null);
     }
 
     public int getDifficultyLevel() {
