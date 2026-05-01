@@ -377,8 +377,14 @@ public class QuestTest {
     void testQuestionModel() {
         assertAll("Comprehensive Model Validation Question",
                 () -> {
-                    Question question = new Question(1, "Test question",
-                            "Option A", "Option B", 2, 3);
+                    Question question = new Question.Builder()
+                            .id(1)
+                            .text("Test question")
+                            .option1("Option A")
+                            .option2("Option B")
+                            .nextIdOption1(2)
+                            .nextIdOption2(3)
+                            .build();
 
                     assertAll("Basic fields and default values",
                             () -> assertEquals(1, question.getId(), "ID must be 1"),
@@ -393,9 +399,18 @@ public class QuestTest {
                     );
                 },
                 () -> {
-                    Question finalQuestion = new Question(2, "Final", "Restart",
-                            "Exit", 1, 1, true,
-                            "You win!", "You lose!", 5);
+                    Question finalQuestion = new Question.Builder()
+                            .id(2)
+                            .text("Final")
+                            .option1("Restart")
+                            .option2("Exit")
+                            .nextIdOption1(1)
+                            .nextIdOption2(1)
+                            .isFinal(true)
+                            .victoryMessage("You win!")
+                            .defeatMessage("You lose!")
+                            .difficulty(5)
+                            .build();
 
                     assertAll("Specific fields of the final question",
                             () -> assertTrue(finalQuestion.isFinal(),

@@ -7,36 +7,56 @@ public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private int id;
-    private String text;
-    private String option1;
-    private String option2;
-    private int nextIdOption1;
-    private int nextIdOption2;
-    private boolean isFinal;
-    private String victoryMessage;
-    private String defeatMessage;
+    private final int id;
+    private final String text;
+    private final String option1;
+    private final String option2;
+    private final int nextIdOption1;
+    private final int nextIdOption2;
+    private final boolean isFinal;
+    private final String victoryMessage;
+    private final String defeatMessage;
     private final int difficulty;
 
-    public Question(int id, String text, String option1, String option2,
-                    int nextIdOption1, int nextIdOption2) {
-        this(id, text, option1, option2, nextIdOption1, nextIdOption2, false,
-                null, null, 1);
+    private Question(Builder builder) {
+        this.id = builder.id;
+        this.text = builder.text;
+        this.option1 = builder.option1;
+        this.option2 = builder.option2;
+        this.nextIdOption1 = builder.nextIdOption1;
+        this.nextIdOption2 = builder.nextIdOption2;
+        this.isFinal = builder.isFinal;
+        this.victoryMessage = builder.victoryMessage;
+        this.defeatMessage = builder.defeatMessage;
+        this.difficulty = builder.difficulty;
     }
 
-    public Question(int id, String text, String option1, String option2,
-                    int nextIdOption1, int nextIdOption2, boolean isFinal,
-                    String victoryMessage, String defeatMessage, int difficulty) {
-        this.id = id;
-        this.text = text;
-        this.option1 = option1;
-        this.option2 = option2;
-        this.nextIdOption1 = nextIdOption1;
-        this.nextIdOption2 = nextIdOption2;
-        this.isFinal = isFinal;
-        this.victoryMessage = victoryMessage;
-        this.defeatMessage = defeatMessage;
-        this.difficulty = difficulty;
+    public static class Builder {
+        private int id;
+        private String text;
+        private String option1;
+        private String option2;
+        private int nextIdOption1;
+        private int nextIdOption2;
+        private boolean isFinal = false;
+        private String victoryMessage;
+        private String defeatMessage;
+        private int difficulty = 1;
+
+        public Builder id(int id) { this.id = id; return this; }
+        public Builder text(String text) { this.text = text; return this; }
+        public Builder option1(String option1) { this.option1 = option1; return this; }
+        public Builder option2(String option2) { this.option2 = option2; return this; }
+        public Builder nextIdOption1(int id) { this.nextIdOption1 = id; return this; }
+        public Builder nextIdOption2(int id) { this.nextIdOption2 = id; return this; }
+        public Builder isFinal(boolean isFinal) { this.isFinal = isFinal; return this; }
+        public Builder victoryMessage(String msg) { this.victoryMessage = msg; return this; }
+        public Builder defeatMessage(String msg) { this.defeatMessage = msg; return this; }
+        public Builder difficulty(int difficulty) { this.difficulty = difficulty; return this; }
+
+        public Question build() {
+            return new Question(this);
+        }
     }
 
     public int getId() { return id; }
