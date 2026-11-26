@@ -1,29 +1,59 @@
-# project-quest - это небольшое учебное Java-веб-приложение на основе сервлетов.
+# Текстовый веб-квест (Java Quest Web Application)
 
-# Стек технологий (Tech Stack)
-* **Backend:** Java 25, Jakarta Servlet API
-* **Frontend:** JSP, JSTL, CSS, JS
-* **Инструменты:** Maven, Tomcat 10.1.52
-* **Тестирование и логирование:** JUnit 5, SLF4J, Jackson
+Веб-приложение с интерактивными текстовыми квестами, разработанное на Java 25, Jakarta Servlets и JSP. Пользователи могут ввести своё имя, выбрать один из трёх сюжетных квестов, проходить ветвящиеся сценарии с иллюстрациями и отслеживать статистику прохождений в рамках сессии.
 
-# Структура проекта
-```
-src/
-├── main/
-│   ├── java/com/javarush/projectquest/
-│   │   ├── command/                # Реализация паттерна Command для логики игры
-│   │   ├── controller/             # Веб-слой: обработка HTTP-запросов (Servlet)
-│   │   ├── filter/                 # Фильтрация запросов и обработка статических ресурсов (CSS, JS, изображения)
-│   │   ├── listener/               # Управление жизненным циклом сессий и инициализация приложения
-│   │   ├── quests/                 # Игровая логика: сценарии, вопросы и ответы
-│   └── resources/
-│       └── properties/             # Конфигурационные файлы проекта
-└── test/                           # Юнит-тестирование бизнес-логики
-```
-# Endpoints
-```
-http://localhost:8080/
-http://localhost:8080/selectQuest
-http://localhost:8080/game
-http://localhost:8080/game?result=final
-```
+## 🛠 Технологический стек
+* **Язык:** Java 25
+* **Web и UI:** Jakarta Servlet API 6.0, JSP, Jakarta JSTL 3.0, Bootstrap 5.3 (WebJars)
+* **Архитектура и паттерны:** MVC, Front Controller, Command (`Command`, `CommandFactory`), Builder (`Question.Builder`), Singleton (`CommandFactory`, `QuestManager`), Post-Redirect-Get (PRG)
+* **Библиотеки и логирование:** Reflections (`@WebCommand`), SLF4J
+* **Тестирование и качество кода:** JUnit 5 (`QuestTest`), Maven Surefire & Failsafe, JaCoCo (отчёт о покрытии кода)
+* **Сборка и деплой:** Maven (`WAR`), Apache Tomcat 10.1+ / 11
+
+## ✨ Основной функционал
+* **Три сюжетных квеста на выбор:**
+    * *Поиск сокровищ в замке* (`TreasureHuntQuest`, жанр: Хоррор/Приключения) — 12 шагов, 6 финальных концовок.
+    * *Космическое приключение* (`SpaceAdventureQuest`, жанр: Выживание) — 10 шагов, 5 финальных концовок.
+    * *Детективная история* (`DetectiveStoryQuest`, сложность 5/5) — 12 шагов, 6 финальных концовок.
+* **Каталог и фильтрация квестов (`QuestManager`):** поддержка поиска по ID/названию, фильтрации по жанру и уровню сложности, а также глобальный потокобезопасный подсчёт запусков каждого квеста.
+* **Сохранение прогресса и статистики в сессии (`HttpSession`):** отслеживание имени игрока, текущего шага, количества сыгранных игр, побед и поражений, а также мгновенный перезапуск квеста (`restart`).
+* **Безопасная обработка форм (PRG):** использование паттерна `Post-Redirect-Get` предотвращает дублирование игровых ходов при обновлении страницы в браузере.
+
+## 🏗 Структура проекта
+* `command` — обработчики веб-запросов (`StartCommand`, `SelectQuestCommand`, `GameCommand`, `RestartCommand`, `UnknownCommand`), фабрика команд (`CommandFactory`) и кастомная аннотация `@WebCommand`.
+* `quests` — доменная модель и сценарии: интерфейс `Quest`, базовый класс `BaseLevel`, реализации квестов (`DetectiveStoryQuest`, `SpaceAdventureQuest`, `TreasureHuntQuest`), неизменяемая модель шага с паттерном Builder (`Question`), состояние сессии игрока (`GameState`) и реестр квестов (`QuestManager`).
+* `filter` — веб-фильтр (`StaticResourceFilter`) для перехвата и маршрутизации статических ресурсов (`css`, `js`, изображения, шрифты).
+* `listener` — слушатель жизненного цикла приложения и сессий (`SessionListener`): предзагрузка `CommandFactory` при старте контекста (`ServletContextListener`) и потокобезопасный учёт активных сессий (`HttpSessionListener`, `AtomicInteger`).
+* `resources` — конфигурация метаданных квестов (`config.properties`), локализованные тексты сценариев (`ResourceBundle`: `*_messages.properties`) и фоновые иллюстрации.
+* `webapp` — JSP-представления (`index.jsp`, `quest-selection.jsp`, `game.jsp`, `result.jsp`) со стилизацией на Bootstrap 5.
+* `test` — набор из 21 модульного теста на JUnit 5 (`QuestTest`), проверяющий загрузку квестов, фильтрацию, счётчики статистики, модель `GameState`, сборку `Question.Builder` и игровые маршруты до победных и проигрышных концовок.
+
+## 🚀 Запуск проекта локально
+
+### Предварительные требования
+* JDK 25
+* Maven 3.8+
+* Apache Tomcat 10.1 или 11 (с поддержкой Jakarta EE 10 / Servlet 6.0)
+
+### Сборка, тестирование и запуск
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/kizand/project-quest.git
+   cd project-quest
+   ```
+
+2. **Запустите тесты и соберите `WAR`-архив (включая отчёт JaCoCo):**
+   ```bash
+   mvn clean verify
+   ```
+   *(Отчёт о покрытии кода JaCoCo будет сгенерирован в `target/site/jacoco/index.html`)*
+
+3. **Разверните приложение на сервере:**
+    * Скопируйте собранный файл `target/project-quest-1.0-SNAPSHOT.war` в директорию `webapps/` вашего сервера Apache Tomcat (или настройте запуск через **Run/Debug Configurations -> Tomcat Server** в IntelliJ IDEA).
+    * Откройте приложение в браузере по адресу: `http://localhost:8080/project-quest-1.0-SNAPSHOT/` (или `http://localhost:8080/` при настройке корневого контекста).
+
+## 💡 Ключевые технические решения
+* **Автоматическая маршрутизация через `@WebCommand` и Reflection API:** `CommandFactory` при старте приложения (через `SessionListener`) сканирует пакет команд с помощью библиотеки `Reflections`, находит классы с аннотацией `@WebCommand` и регистрирует их в реестре маршрутов без ручного конфигурирования.
+* **Паттерн Builder и неизменяемые модели (`Question`):** все узлы сюжетного графа конструируются через `Question.Builder` и возвращаются в виде немодифицируемых коллекций (`Collections.unmodifiableMap`), обеспечивая безопасность при одновременном прохождении квестов разными пользователями.
+* **Паттерн Post-Redirect-Get (PRG) и Flash-атрибуты:** все изменения игрового состояния выполняются через `POST`-запросы с последующим редиректом на `GET`, а финальные сообщения о победе/поражении передаются через сессию с немедленной очисткой после отображения.
+* **Покрытие бизнес-логики тестами JUnit 5 и JaCoCo:** `QuestTest` проверяет целостность графа вопросов, корректность переходов по веткам сюжета и изоляцию состояния `QuestManager` между тестами, а метрики покрытия контролируются плагином `JaCoCo`.
